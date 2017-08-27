@@ -26,7 +26,7 @@ def _matFun_(baseModule, name, copy, *args):
 			if len(args) == 1:
 				newArgs = newArgs[0]
 
-			v = 0
+			v = None
 			if baseModule == 'operator':
 				f0 = _getFun_(baseModule, name, newArgs[0])
 				f1 = _getFun_(baseModule, '__r'+name.split('__')[1]+'__', newArgs[1])
@@ -34,8 +34,17 @@ def _matFun_(baseModule, name, copy, *args):
 				if v == NotImplemented:
 					v = f1(newArgs[0])
 			else:
-				f = _getFun_(baseModule, name, newArgs)
-				v = f(newArgs)
+				if isinstance(baseModule, list) == False:
+					baseModule = [baseModule]
+				for bm in baseModule:
+					try:
+						f = _getFun_(bm, name, newArgs)
+						v = f(newArgs)
+						break
+					except TypeError as e:
+						pass
+			if v == None:
+				raise TypeError(name + 'not implemented for the type given')
 
 			m[rowId][colId] = v
 	return m
@@ -78,18 +87,31 @@ def transpose(m, copy = True):
 		for colId in range(0, m.cols()):
 			m2[colId][rowId] = m[rowId][colId]
 	if copy == False:
-		m = m2
+		m.copy(m2)
+	return m2
+
+def clone(m):
+	m2 = zeros(m.rows(),m.cols())
+	for rowId in range(0, m.rows()):
+		for colId in range(0, m.cols()):
+			m2[rowId][colId] = m[rowId][colId]
 	return m2
 
 def sin(m, copy = True):
-	return _matFun_('math','sin', copy, m)
+	return _matFun_(['math', 'cmath'],'sin', copy, m)
 def cos(m, copy = True):
-	return _matFun_('math','cos', copy, m)
+	return _matFun_(['math', 'cmath'],'cos', copy, m)
 def tan(m, copy = True):
-	return _matFun_('math','tan', copy, m)
+	return _matFun_(['math', 'cmath'],'tan', copy, m)
 def asin(m, copy = True):
-	return _matFun_('math','asin', copy, m)
+	return _matFun_(['math', 'cmath'],'asin', copy, m)
 def acos(m, copy = True):
-	return _matFun_('math','acos', copy, m)
+	return _matFun_(['math', 'cmath'],'acos', copy, m)
 def atan(m, copy = True):
-	return _matFun_('math','atan', copy, m)
+	return _matFun_(['math', 'cmath'],'atan', copy, m)
+
+def myFunExample(x):
+	return 2*x + 1
+
+def funExample(m, copy = True):
+	return _matFun_('MtFun', 'myFunExample', copy, m)

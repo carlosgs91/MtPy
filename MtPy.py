@@ -1,3 +1,4 @@
+from __future__ import division
 from MtFun import *
 import MtFun as mf
 
@@ -45,6 +46,13 @@ class MtPy(object):
 			if rowId != self.rows() - 1:
 				s += '\n'
 		return s
+
+	def type(self):
+		mStr = mf.zeros(self.rows(), self.cols())
+		for rowId in range(0,self.rows()):
+			for colId in range(0, self.cols()):
+				mStr[rowId][colId] = str(type(self[rowId][colId]))
+		return str(mStr)
 
 	def __repr__(self):
 		return self.__str__()
@@ -107,6 +115,9 @@ class MtPy(object):
 	def __rmul__(self, m):
 		#mat vs mat shouldnt reverse...
 		return self.__mul__(m)
+
+	def copy(self, m):
+		self.m = m.m
 
 	def transpose(self, copy = False):
 		return mf.transpose(self, copy = copy)
