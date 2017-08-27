@@ -36,7 +36,7 @@ print '\nA wrapper would make functions work in matrices, for example'
 print '\ndef myFunExample(x):'
 print '    return 2*x + 1'
 print '\nNow the wrapper calls the function trough _matFun_'
-print 'def funExample(m, copy = True):'
+print '\ndef funExample(m, copy = True):'
 print '    return _matFun_(\'MtFun\', \'myFunExample\', copy, m)'
 E = mt.MtPy([1,2],[3,4])
 print '\nE = mt.MtPy([1,2],[3,4]) = \n' + str(E)
