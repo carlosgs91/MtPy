@@ -54,6 +54,7 @@ def myFunExample(x):
     return 2*x + 1
 
 Now the wrapper calls the function trough _matFun_
+
 def funExample(m, copy = True):
     return _matFun_('MtFun', 'myFunExample', copy, m)
 
